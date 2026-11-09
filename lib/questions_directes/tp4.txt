@@ -1,0 +1,91 @@
+REPONSES AUX QUESTIONS DE COMPREHENSION - TP Flutter EMSI Connect
+
+1. Quelle est la difference entre TextField et TextFormField ?
+TextField est un simple champ de saisie. TextFormField est un TextField
+enveloppe dans un FormField : il s'integre a un Form et offre en plus
+validator, onSaved et initialValue. Pour valider plusieurs champs d'un coup,
+on utilise TextFormField.
+
+2. Quel est le role de Form ?
+Form regroupe plusieurs champs (FormField) et permet de les gerer ensemble :
+valider tous les champs (validate), les enregistrer (save) ou les reinitialiser
+(reset) en un seul appel.
+
+3. Pourquoi associer une GlobalKey<FormState> a Form ?
+La cle donne acces a l'etat du Form depuis l'exterieur, par exemple depuis un
+bouton situe hors des champs. Avec _formKey.currentState!.validate(), on lance
+la validation de tous les champs du formulaire.
+
+4. Que retourne un validator quand le champ est valide ? Et quand il est invalide ?
+Valide : il retourne null. Invalide : il retourne une chaine de caracteres, le
+message d'erreur, qui s'affiche sous le champ.
+
+5. Pourquoi keyboardType: TextInputType.emailAddress ne suffit-il pas a valider un email ?
+Il ne fait qu'adapter le clavier affiche (touche @ accessible, etc.). Il
+n'empeche pas de saisir un texte invalide, et l'utilisateur peut coller
+n'importe quoi. Seul un validator verifie reellement la valeur saisie.
+
+6. A quoi sert TextEditingController ? Comment lire sa valeur ?
+Il permet de lire et de modifier le contenu d'un champ par le code. On lit la
+valeur avec controller.text, par exemple _emailController.text.trim().
+
+7. Pourquoi liberer les controleurs dans dispose() ?
+Un controller garde des listeners relies au champ. Sans dispose(), ils restent
+en memoire apres la destruction de la page : c'est une fuite memoire. dispose()
+est appelee une seule fois, quand le State est detruit, et super.dispose()
+s'appelle en dernier.
+
+8. Quelle difference entre StatelessWidget et StatefulWidget dans ce TP ?
+StatelessWidget n'a aucun etat modifiable : son affichage depend uniquement de
+ses parametres. StatefulWidget possede un objet State qui conserve des donnees
+(controllers, _showPassword) et peut etre reconstruit quand elles changent.
+Les pages de formulaire sont Stateful car elles gerent des controllers a
+liberer et la visibilite du mot de passe.
+
+9. Quel est le role de setState pour le bouton de visibilite du mot de passe ?
+setState modifie _showPassword et informe Flutter que l'etat a change. Le widget
+est alors reconstruit avec la nouvelle valeur : obscureText s'inverse et l'icone
+change. Sans setState, la variable change mais l'ecran ne se met pas a jour.
+
+10. Pourquoi ne faut-il pas afficher un mot de passe dans la console ?
+Les logs peuvent etre lus par d'autres personnes, conserves dans des fichiers,
+envoyes dans des rapports d'erreur ou partages lors d'un debogage. Un mot de
+passe affiche en clair est une fuite de donnee sensible. Meme chose pour un
+SnackBar, visible par quiconque regarde l'ecran.
+
+11. Pourquoi une validation locale ne signifie-t-elle pas qu'un compte a ete cree ?
+La validation ne verifie que le format des champs, sur l'appareil. Aucune
+donnee n'est envoyee a un serveur ni enregistree dans une base. Un compte
+n'existe qu'apres un appel a un back-end (API, Firebase, etc.) qui le cree.
+D'ou le message "Formulaire valide - compte non cree".
+
+12. A quoi servent ThemeData et ColorScheme.fromSeed ?
+ThemeData definit les choix visuels communs a toute l'application (couleurs,
+champs, boutons, barre d'application). ColorScheme.fromSeed genere une palette
+coherente (primary, secondary, surface, etc.) a partir d'une seule couleur de
+depart. Le theme se declare une fois dans MaterialApp.
+
+13. Quelle difference entre une couleur codee en dur et une couleur obtenue avec Theme.of(context) ?
+Une couleur codee en dur (Colors.teal) est figee : elle ignore le theme et doit
+etre modifiee page par page. Une couleur lue avec
+Theme.of(context).colorScheme suit le theme global : changer la seed ou passer
+en mode sombre met a jour toute l'application sans toucher aux pages.
+
+14. Quelle est la fonction de ConstrainedBox(maxWidth: 420) ?
+Elle limite la largeur maximale du formulaire. Sur tablette ou navigateur, il
+ne s'etire pas sur tout l'ecran, ce qui garde des champs lisibles. Sur petit
+ecran, la contrainte ne change rien : le formulaire prend la largeur disponible.
+
+15. Quelle difference entre MediaQuery et LayoutBuilder ?
+MediaQuery donne des informations sur la fenetre entiere (taille de l'ecran,
+orientation, clavier). LayoutBuilder donne les contraintes du parent a
+l'endroit exact ou il est place. LayoutBuilder est donc plus precis pour une
+disposition locale, car le widget peut etre dans un conteneur plus etroit que
+la fenetre.
+
+16. Quelle difference entre ListView et GridView ?
+ListView affiche les elements en une seule colonne (ou ligne) defilante :
+liste de cours, de messages, de contacts. GridView les repartit sur plusieurs
+colonnes : menu de rubriques, galerie de photos, catalogue. Les deux ont une
+version .builder qui ne construit que les elements visibles, adaptee aux
+longues listes.
