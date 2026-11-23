@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'courses_page.dart';
+import 'profile_page.dart';
+import 'login_page.dart';
+import 'settings_page.dart';
+import 'about_page.dart';
+import 'multimedia_page.dart';
 
 class _Rubrique {
   final String titre;
@@ -6,8 +12,15 @@ class _Rubrique {
   const _Rubrique(this.titre, this.icone);
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  bool notificationsEnabled = true;
 
   static const _rubriques = [
     _Rubrique('Mes cours', Icons.menu_book),
@@ -41,6 +54,118 @@ class HomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => debugPrint('Fonctionnalité bientôt disponible'),
         child: const Icon(Icons.edit),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            UserAccountsDrawerHeader(
+              decoration: BoxDecoration(color: colors.primary),
+              accountName: const Text('Étudiant EMSI'),
+              accountEmail: const Text('etudiant@emsi.ma'),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: colors.onPrimary,
+                child: Icon(Icons.person, color: colors.primary),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.home_outlined),
+              title: const Text('Accueil'),
+              selected: true,
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              leading: const Icon(Icons.menu_book_outlined),
+              title: const Text('Mes cours'),
+              onTap: () {
+                Navigator.pop(context); // ferme le Drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CoursesPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person_outline),
+              title: const Text('Mon profil'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfilePage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.perm_media),
+              title: const Text('Espace multimédia'),
+              onTap: () {
+                Navigator.pop(context); // Ferme le Drawer.
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MultimediaPage()),
+                );
+              },
+            ),
+            const Divider(),
+            SwitchListTile(
+              secondary: const Icon(Icons.notifications_outlined),
+              title: const Text('Notifications'),
+              value: notificationsEnabled,
+              onChanged: (value) {
+                setState(() {
+                  notificationsEnabled = value;
+                });
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: const Text('À propos'),
+              onTap: () {
+                Navigator.pop(context); // Ferme le Drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AboutPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings_outlined),
+              title: const Text('Paramètres'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsPage(),
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Déconnexion'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                  (route) => false,
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -99,7 +224,27 @@ class HomePage extends StatelessWidget {
                               color: colors.primaryContainer,
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(12),
-                                onTap: () => debugPrint('${r.titre} ouvert'),
+                                onTap: () {
+                                  if (r.titre == 'Mes cours') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const CoursesPage(),
+                                      ),
+                                    );
+                                  } else if (r.titre == 'Mon profil') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ProfilePage(),
+                                      ),
+                                    );
+                                  } else {
+                                    debugPrint('${r.titre} ouvert');
+                                  }
+                                },
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [

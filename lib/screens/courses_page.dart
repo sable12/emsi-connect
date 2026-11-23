@@ -215,6 +215,17 @@ class CoursesPage extends StatelessWidget {
               },
             ),
           ),
+         /* // Bouton de retour explicite (Navigator.pop)
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Retour'),
+              ),
+            ),
+          ),*/
         ],
       ),
     );

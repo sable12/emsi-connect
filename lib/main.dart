@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const HomePage(), // ou RegisterPage() pour tester l'inscription
+      home: const LoginPage(), // ou RegisterPage() pour tester l'inscription
     );
   }
 }

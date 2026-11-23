@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -66,9 +67,11 @@ class _LoginPageState extends State<LoginPage> {
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                final email = _emailController.text.trim();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Saisie valide : $email')),
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(),
+                  ),
                 );
               }
             },
